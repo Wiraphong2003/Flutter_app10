@@ -135,34 +135,6 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  // Widget searchTF() {
-  //   return TextField(
-  //     decoration: const InputDecoration(
-  //       border: OutlineInputBorder(
-  //         borderRadius: BorderRadius.all(Radius.circular(
-  //           5.0,
-  //         )),
-  //       ),
-  //       filled: true,
-  //       fillColor: Colors.white,
-  //       contentPadding: EdgeInsets.all(15.0),
-  //       hintText: 'Filter by name or email',
-  //     ),
-  //     onChanged: (string) {
-  //       debouncer.run(() {
-  //         setState(() {
-  //           title = 'Searching...';
-  //         });
-  //         Services.getUsers().then((userFromServer) {
-  //           setState(() {
-  //             users = Users.filterList(userFromServer, string);
-  //             title = widget.title;
-  //           });
-  //         });
-  //       });
-  //     },
-  //   );
-  // }
   Widget searchTF() {
     return TextField(
       decoration: const InputDecoration(
