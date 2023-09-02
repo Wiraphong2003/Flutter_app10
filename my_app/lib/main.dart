@@ -1,10 +1,11 @@
 import 'dart:async';
-import 'package:my_app/UserDetail.dart';
 
-import 'Services.dart';
-import 'models/users.dart';
 import 'package:flutter/material.dart';
 import 'package:my_app/models/index.dart';
+
+import 'Services.dart';
+import 'UserDetail.dart';
+import 'models/users.dart';
 
 void main() {
   runApp(const MyApp());
@@ -92,17 +93,15 @@ class _MyHomePageState extends State<MyHomePage> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
             ListTile(
-              leading: const Icon(
-                IconData(0xe61e, fontFamily: 'MaterialIcons'),
-                size: 50,
-              ),
+              leading: CircleAvatar(
+                  backgroundImage: NetworkImage(users!.users[index].img)),
               title: Text(
-                "Name: ${users!.users[index].name}",
+                users!.users[index].name,
                 style: const TextStyle(color: Colors.green, fontSize: 16.0),
               ),
               subtitle: Text(
                 "Email: ${users!.users[index].email}",
-                style: TextStyle(color: Colors.green, fontSize: 14.0),
+                style: const TextStyle(color: Colors.green, fontSize: 14.0),
               ),
               trailing: const Icon(Icons.arrow_forward_ios),
               onTap: () {
@@ -110,6 +109,24 @@ class _MyHomePageState extends State<MyHomePage> {
                     builder: (context) => UserDetail(
                           user: users!.users[index],
                         )));
+                // showDialog(
+                //   context: context,
+                //   builder: (context) {
+                //     return AlertDialog(
+                //       content: Column(
+                //         children: [
+                //           const SizedBox(height: 50),
+                //           CircleAvatar(
+                //             backgroundImage:
+                //                 NetworkImage(users!.users[index].img),
+                //           ),
+                //           Text(users!.users[index].name),
+                //           Text(users!.users[index].phone),
+                //         ],
+                //       ),
+                //     );
+                //   },
+                // );
               },
             ),
           ],
