@@ -1,0 +1,24 @@
+{
+    "id": 1,
+    "name": "Wiraphong Srapsooksri",
+    "username": "Wiraphong",
+    "email": "Sincere@april.biz",
+    "address": {
+        "street": "Kulas Light",
+        "suite": "Apt. 556",
+        "city": "Gwenborough",
+        "zipcode": "92998-3874",
+        "geo": {
+            "lat": "-37.3159",
+            "lng": "81.1496"
+        }
+    },
+    "phone": "1-770-736-8031 x56442",
+    "website": "hildegard.org",
+    "company": {
+        "name": "Romaguera-Crona",
+        "catchPhrase": "Multi-layered client-server neural-net",
+        "bs": "harness real-time e-markets"
+    },
+    "img": "https://scontent.fnak1-1.fna.fbcdn.net/v/t39.30808-6/342352220_272060915257384_4141320776583751185_n.jpg?_nc_cat=100&ccb=1-7&_nc_sid=a2f6c7&_nc_eui2=AeFywTJCkUPbtVLyCVZ3oigz2jJBKb0MAjraMkEpvQwCOqON7AMPOUlbGCZMIbc-MEnSe9JlcWNXSa43ZhIO2hrU&_nc_ohc=Te-eFOzuJLAAX-cvvLH&_nc_ht=scontent.fnak1-1.fna&oh=00_AfDWH-Te5PgCDPBIzD635-bP5TCzato3OQOG38mBMwdHhA&oe=64F78E73"
+}
