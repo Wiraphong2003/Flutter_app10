@@ -7,7 +7,18 @@ class Users {
   Users();
 
   late List<User> users;
-  
-  factory Users.fromJson(Map<String,dynamic> json) => _$UsersFromJson(json);
+
+  factory Users.fromJson(Map<String, dynamic> json) => _$UsersFromJson(json);
   Map<String, dynamic> toJson() => _$UsersToJson(this);
+
+  static Users? filterList(Users users, String filterString) {
+    Users tempusers = users;
+    List<User> usersList = tempusers.users
+        .where((u) =>
+            (u.name.toLowerCase().contains(filterString.toLowerCase())) ||
+            (u.email.toLowerCase().contains(filterString.toLowerCase())))
+        .toList();
+    users.users = usersList;
+    return users;
+  }
 }

@@ -1,7 +1,10 @@
-import 'package:flutter/material.dart';
 import 'dart:async';
+import 'package:my_app/UserDetail.dart';
+
 import 'Services.dart';
 import 'models/users.dart';
+import 'package:flutter/material.dart';
+import 'package:my_app/models/index.dart';
 
 void main() {
   runApp(const MyApp());
@@ -32,13 +35,31 @@ class MyHomePage extends StatefulWidget {
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
+class Debouncer {
+  final int milliseconds;
+  VoidCallback? action;
+  Timer? _timer;
+
+  Debouncer({required this.milliseconds});
+
+  run(VoidCallback action) {
+    if (null != _timer) {
+      _timer?.cancel();
+    }
+    _timer = Timer(Duration(microseconds: milliseconds), action);
+  }
+}
+
 class _MyHomePageState extends State<MyHomePage> {
-  late Users users;
-  late String title;
+  final debouncer = Debouncer(milliseconds: 1000);
+  Users? users;
+  String? title;
+  bool isLoading = false;
 
   @override
-  void initSrate() {
+  void initState() {
     super.initState();
+    isLoading = true;
     title = 'Loading users ...';
     users = Users();
 
@@ -46,6 +67,7 @@ class _MyHomePageState extends State<MyHomePage> {
       setState(() {
         users = usersFromServer;
         title = widget.title;
+        isLoading = false;
       });
     });
   }
@@ -53,10 +75,11 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget list() {
     return Expanded(
       child: ListView.builder(
-          itemCount: users.users == null ? 0 : users.users.length,
-          itemBuilder: (BuildContext context, int index) {
-            return row(index);
-          }),
+        itemCount: users!.users == null ? 0 : users!.users.length,
+        itemBuilder: (BuildContext context, int index) {
+          return row(index);
+        },
+      ),
     );
   }
 
@@ -66,18 +89,28 @@ class _MyHomePageState extends State<MyHomePage> {
         padding: const EdgeInsets.all(10.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            Text(
-              users.users[index].name,
-              style: const TextStyle(
-                fontSize: 16.0,
-                color: Colors.black,
+            ListTile(
+              leading: const Icon(
+                IconData(0xe61e, fontFamily: 'MaterialIcons'),
+                size: 50,
               ),
-            ),
-            Text(
-              users.users[index].email.toLowerCase(),
-              style: const TextStyle(fontSize: 14.0, color: Colors.grey),
+              title: Text(
+                "Name: ${users!.users[index].name}",
+                style: const TextStyle(color: Colors.green, fontSize: 16.0),
+              ),
+              subtitle: Text(
+                "Email: ${users!.users[index].email}",
+                style: TextStyle(color: Colors.green, fontSize: 14.0),
+              ),
+              trailing: const Icon(Icons.arrow_forward_ios),
+              onTap: () {
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => UserDetail(
+                          user: users!.users[index],
+                        )));
+              },
             ),
           ],
         ),
@@ -85,21 +118,86 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
+  // Widget searchTF() {
+  //   return TextField(
+  //     decoration: const InputDecoration(
+  //       border: OutlineInputBorder(
+  //         borderRadius: BorderRadius.all(Radius.circular(
+  //           5.0,
+  //         )),
+  //       ),
+  //       filled: true,
+  //       fillColor: Colors.white,
+  //       contentPadding: EdgeInsets.all(15.0),
+  //       hintText: 'Filter by name or email',
+  //     ),
+  //     onChanged: (string) {
+  //       debouncer.run(() {
+  //         setState(() {
+  //           title = 'Searching...';
+  //         });
+  //         Services.getUsers().then((userFromServer) {
+  //           setState(() {
+  //             users = Users.filterList(userFromServer, string);
+  //             title = widget.title;
+  //           });
+  //         });
+  //       });
+  //     },
+  //   );
+  // }
+  Widget searchTF() {
+    return TextField(
+      decoration: const InputDecoration(
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.all(Radius.circular(
+            5.0,
+          )),
+        ),
+        filled: true,
+        fillColor: Colors.white,
+        contentPadding: EdgeInsets.all(15.0),
+        hintText: 'Filter by name or email',
+      ),
+      onChanged: (String) {
+        debouncer.run(() {
+          setState(() {
+            title = "Searching ...";
+          });
+          Services.getUsers().then((usersFromServer) {
+            setState(() {
+              users = Users.filterList(usersFromServer, String);
+              title = widget.title;
+            });
+          });
+        });
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text(widget.title),
-      ),
-      body: Container(
-        padding: const EdgeInsets.all(10.0),
-        child: Column(
-          children: <Widget>[
-            list(),
-          ],
+        appBar: AppBar(
+          backgroundColor: const Color.fromARGB(255, 56, 3, 83),
+          title: Text(
+            widget.title,
+            style: const TextStyle(
+                fontWeight: FontWeight.bold, color: Colors.white),
+          ),
         ),
-      ),
-    );
+        body: Container(
+          padding: const EdgeInsets.all(10.0),
+          child: isLoading
+              ? const Center(
+                  child: CircularProgressIndicator(),
+                )
+              : Column(
+                  children: <Widget>[
+                    searchTF(),
+                    list(),
+                  ],
+                ),
+        ));
   }
 }
