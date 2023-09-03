@@ -97,11 +97,13 @@ class _MyHomePageState extends State<MyHomePage> {
                   backgroundImage: NetworkImage(users!.users[index].img)),
               title: Text(
                 users!.users[index].name,
-                style: const TextStyle(color: Colors.green, fontSize: 16.0),
+                style: const TextStyle(
+                    color: Color.fromARGB(255, 0, 0, 0), fontSize: 16.0),
               ),
               subtitle: Text(
                 "Email: ${users!.users[index].email}",
-                style: const TextStyle(color: Colors.green, fontSize: 14.0),
+                style: const TextStyle(
+                    color: Color.fromARGB(255, 0, 0, 0), fontSize: 14.0),
               ),
               trailing: const Icon(Icons.arrow_forward_ios),
               onTap: () {
